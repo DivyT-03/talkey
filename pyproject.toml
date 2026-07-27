@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "talkey"
+dynamic = ["version"]
+description = "Simple Text-To-Speech (TTS) interface library with multi-language and multi-engine support."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Nickolas Grigoriadis", email = "nagrigoriadis@gmail.com" },
+]
+requires-python = ">=3.9"
+dependencies = [
+    "langid",
+    "requests",
+    "audioread",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft Windows",
+    "Operating System :: POSIX :: Linux",
+    "Environment :: MacOS X",
+    "Environment :: Win32 (MS Windows)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+
+[project.urls]
+Homepage = "https://github.com/grigi/talkey"
+Documentation = "http://talkey.readthedocs.org/"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pylint",
+    "mypy",
+    "gtts",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "talkey.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["talkey", "talkey.*"]
+
+[tool.pytest.ini_options]
+# Pytest's default python_classes ("Test*") only matches classes that START
+# with "Test". Every test class in this suite (both unittest.TestCase
+# subclasses and plain pytest classes) is instead named "<Thing>Test" -
+# without this, plain (non-TestCase) classes like "FestivalEscapingTest" are
+# silently never collected at all (not even shown as skipped).
+python_classes = ["Test*", "*Test"]
+markers = [
+    "integration: requires a real engine binary/service to be installed/reachable",
+    "mocked: pure unit test, no external dependency, always runs",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["talkey"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_ignores = true
+warn_redundant_casts = true
+# langid/gtts/audioread ship no type stubs and aren't PEP 561 packages.
+ignore_missing_imports = true

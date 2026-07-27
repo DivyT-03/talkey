@@ -1,8 +1,7 @@
-# talkey
+# talkey runtime dependencies (see pyproject.toml for the authoritative list)
 langid
 requests
+audioread
 
-# What follows here is just for testing or code grading:
-tox
-pylint
-coverage
+# For development/testing, install the 'dev' extra instead:
+#   pip install -e .[dev]

@@ -1,11 +1,18 @@
+'''
+MaryTTS: wraps a MaryTTS HTTP server's REST API.
+'''
+from __future__ import annotations
+
 import os
 import tempfile
+from typing import Any
+
 import requests
 
 try:
     # pylint: disable=E0611
     from urlparse import urlunsplit
-    from urllib import urlencode
+    from urllib import urlencode  # type: ignore[attr-defined]
 except ImportError:
     # pylint: disable=E0611
     from urllib.parse import urlunsplit, urlencode
@@ -27,7 +34,7 @@ class MaryTTS(AbstractTTSEngine):
     SLUG = "mary"
 
     @classmethod
-    def _get_init_options(cls):
+    def _get_init_options(cls) -> dict[str, dict[str, Any]]:
         return {
             'enabled': {
                 'description': 'Is enabled?',
@@ -54,20 +61,25 @@ class MaryTTS(AbstractTTSEngine):
             }
         }
 
-    def _makeurl(self, path, query={}):
-        query_s = urlencode(query)
+    def _makeurl(self, path: str, query: dict[str, Any] | None = None) -> str:
+        '''
+        :param path: server path to request (e.g. "voices")
+        :param query: optional query-string parameters
+        :returns: the full URL to request, built from this engine's scheme/host/port
+        '''
+        query_s = urlencode(query or {})
         urlparts = (self.ioptions['scheme'], self.ioptions['host'] + ':' + str(self.ioptions['port']), path, query_s, '')
         return urlunsplit(urlparts)
 
-    def _is_available(self):
+    def _is_available(self) -> bool:
         return check_network_connection(self.ioptions['host'], self.ioptions['port'])
 
-    def _get_options(self):
+    def _get_options(self) -> dict[str, dict[str, Any]]:
         return {}
 
-    def _get_languages(self):
+    def _get_languages(self) -> dict[str, dict[str, Any]]:
         res = requests.get(self._makeurl('voices'), timeout=5).text
-        langs = {}
+        langs: dict[str, dict[str, Any]] = {}
         for voice in [row.split() for row in res.split('\n') if row]:
             lang = voice[1].split('_')[0]
             langs.setdefault(lang, {'default': voice[0], 'voices': {}})
@@ -77,7 +89,14 @@ class MaryTTS(AbstractTTSEngine):
             }
         return langs
 
-    def _say(self, phrase, language, voice, voiceinfo, options):
+    def _say(
+        self,
+        phrase: str,
+        language: str,
+        voice: str,
+        voiceinfo: dict[str, Any],
+        options: dict[str, Any],
+    ) -> None:
         query = {'OUTPUT_TYPE': 'AUDIO',
                  'AUDIO': 'WAVE_FILE',
                  'INPUT_TYPE': 'TEXT',

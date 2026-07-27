@@ -1,13 +1,20 @@
+'''
+GoogleTTS: wraps the gTTS package to use Google Translate's TTS endpoint.
+'''
+from __future__ import annotations
+
 import os
 import tempfile
+from typing import Any
 
 try:
     import gtts
+    import gtts.lang
 except ImportError:  # pragma: no cover
     pass
 
 from talkey.base import AbstractTTSEngine, register
-from talkey.utils import check_network_connection, check_python_import
+from talkey.utils import check_network_connection, check_python_import, voice_codes_to_lang_tree
 
 
 @register
@@ -21,7 +28,7 @@ class GoogleTTS(AbstractTTSEngine):
     SLUG = "google"
 
     @classmethod
-    def _get_init_options(cls):
+    def _get_init_options(cls) -> dict[str, dict[str, Any]]:
         return {
             'enabled': {
                 'description': 'Is enabled?',
@@ -30,25 +37,26 @@ class GoogleTTS(AbstractTTSEngine):
             },
         }
 
-    def _is_available(self):
+    def _is_available(self) -> bool:
         return (
             check_python_import('gtts')
             and check_network_connection('translate.google.com', 80)
         )
 
-    def _get_options(self):
+    def _get_options(self) -> dict[str, dict[str, Any]]:
         return {}
 
-    def _get_languages(self):
-        voices = gtts.gTTS.LANGUAGES.keys()
-        langs = {}
-        for voice in voices:
-            lang = voice[:2]
-            langs.setdefault(lang, {'default': voice, 'voices': {}})
-            langs[lang]['voices'][voice] = {}
-        return langs
+    def _get_languages(self) -> dict[str, dict[str, Any]]:
+        return voice_codes_to_lang_tree(gtts.lang.tts_langs().keys())
 
-    def _say(self, phrase, language, voice, voiceinfo, options):
+    def _say(
+        self,
+        phrase: str,
+        language: str,
+        voice: str,
+        voiceinfo: dict[str, Any],
+        options: dict[str, Any],
+    ) -> None:
         tts = gtts.gTTS(text=phrase, lang=voice)
         with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as f:
             tmpfile = f.name

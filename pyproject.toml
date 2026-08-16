@@ -11,6 +11,9 @@ license = { text = "MIT" }
 authors = [
     { name = "Nickolas Grigoriadis", email = "nagrigoriadis@gmail.com" },
 ]
+maintainers = [
+    { name = "Divyansh Tiwari", email = "inasumaeleven.gautam8@gmail.com" },
+]
 requires-python = ">=3.9"
 dependencies = [
     "langid",
@@ -38,7 +41,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/grigi/talkey"
+Homepage = "https://github.com/DivyT-03/talkey"
+Repository = "https://github.com/DivyT-03/talkey"
+"Bug Tracker" = "https://github.com/DivyT-03/talkey/issues"
 Documentation = "http://talkey.readthedocs.org/"
 
 [project.optional-dependencies]

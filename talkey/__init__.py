@@ -5,4 +5,4 @@ from .tts import Talkey, enumerate_engines, create_engine, TTSError
 
 __all__ = ['Talkey', 'enumerate_engines', 'create_engine', 'TTSError', '__version__']
 
-__version__: str = '0.1.2'
+__version__: str = '0.2.0'

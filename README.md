@@ -2,8 +2,8 @@
 
 Simple Text-To-Speech (TTS) interface library with multi-language and multi-engine support.
 
-[![CI](https://github.com/grigi/talkey/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/grigi/talkey/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/grigi/talkey/branch/master/graph/badge.svg)](https://codecov.io/gh/grigi/talkey)
+[![CI](https://github.com/DivyT-03/talkey/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/DivyT-03/talkey/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/DivyT-03/talkey/branch/master/graph/badge.svg)](https://codecov.io/gh/DivyT-03/talkey)
 
 Documentation: <http://talkey.readthedocs.org/>
 
